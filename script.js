@@ -45,7 +45,7 @@ function searchCitizen() {
     });
 }
 
-// Add a new citizen
+// Ajouter un nouveau citoyen
 function addCitizen() {
     const nom = prompt('Entrez le nom du citoyen:');
     const prenom = prompt('Entrez le prénom du citoyen:');
@@ -54,18 +54,24 @@ function addCitizen() {
     const lieu_naissance = prompt('Entrez le lieu de naissance:');
     const adresse = prompt('Entrez l\'adresse:');
 
-    const newCitizenRef = firebase.database().ref('citizens').push();
-    newCitizenRef.set({
-        nom: nom,
-        prenom: prenom,
-        telephone: telephone,
-        date_naissance: date_naissance,
-        lieu_naissance: lieu_naissance,
-        adresse: adresse
-    });
+    // Vérifier que tous les champs sont remplis
+    if (nom && prenom && telephone && date_naissance && lieu_naissance && adresse) {
+        const newCitizenRef = firebase.database().ref('citizens').push();
+        newCitizenRef.set({
+            nom: nom,
+            prenom: prenom,
+            telephone: telephone,
+            date_naissance: date_naissance,
+            lieu_naissance: lieu_naissance,
+            adresse: adresse
+        });
 
-    alert('Citoyen ajouté avec succès!');
+        alert('Citoyen ajouté avec succès!');
+    } else {
+        alert('Veuillez remplir tous les champs.');
+    }
 }
+
 
 // Delete a citizen
 function deleteCitizen(citizenId) {
