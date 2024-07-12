@@ -3,43 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intranet</title>
-    <!-- Firebase JavaScript SDK -->
+    <title>Arcadia Intranet</title>
+    <!-- Inclure les scripts Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
-    <!-- Initialize Firebase -->
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDL1u1v8MaAIsEdi_nJOtGvbAjSfeharbs",
-        authDomain: "arcadia-intranet.firebaseapp.com",
-        projectId: "arcadia-intranet",
-        storageBucket: "arcadia-intranet.appspot.com",
-        messagingSenderId: "1063972220375",
-        appId: "1:1063972220375:web:954926ef011161d655ef92"
-      };
-// Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-    </script>
-    <!-- Your CSS styles -->
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
 </head>
 <body>
-    <h1>Intranet - Gestion des citoyens</h1>
-
-    <div>
-        <h2>Accueil</h2>
-        <ul>
-            <li><a href="#" onclick="loadCitizens()">Afficher tous les citoyens</a></li>
-            <li><a href="#" onclick="searchCitizen()">Rechercher un citoyen</a></li>
-            <li><a href="#" onclick="addCitizen()">Ajouter un citoyen</a></li>
-        </ul>
+    <div id="app">
+        <h1>Arcadia Intranet</h1>
+        <button id="addCitizenButton">Ajouter un citoyen</button>
+        <button id="searchCitizenButton">Rechercher un citoyen</button>
+        <div id="citizenList"></div>
     </div>
 
-    <div id="citizenList">
-        <!-- This div will be populated with citizen information -->
-    </div>
-
-
+    <!-- Inclure votre fichier JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
