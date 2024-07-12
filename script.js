@@ -45,31 +45,63 @@ function searchCitizen() {
     });
 }
 
-// Ajouter un nouveau citoyen
+// Ajouter un nouveau citoyen via un formulaire
 function addCitizen() {
-    const nom = prompt('Entrez le nom du citoyen:');
-    const prenom = prompt('Entrez le prénom du citoyen:');
-    const telephone = prompt('Entrez le numéro de téléphone:');
-    const date_naissance = prompt('Entrez la date de naissance (format JJ/MM/AAAA):');
-    const lieu_naissance = prompt('Entrez le lieu de naissance:');
-    const adresse = prompt('Entrez l\'adresse:');
+    // Créer un formulaire HTML
+    let html = `
+        <h2>Ajouter un citoyen</h2>
+        <form id="citizenForm">
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" required><br><br>
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom" required><br><br>
+            <label for="telephone">Téléphone:</label>
+            <input type="text" id="telephone" name="telephone" required><br><br>
+            <label for="date_naissance">Date de naissance (JJ/MM/AAAA):</label>
+            <input type="text" id="date_naissance" name="date_naissance" required><br><br>
+            <label for="lieu_naissance">Lieu de naissance:</label>
+            <input type="text" id="lieu_naissance" name="lieu_naissance" required><br><br>
+            <label for="adresse">Adresse:</label>
+            <input type="text" id="adresse" name="adresse" required><br><br>
+            <button type="submit">Ajouter</button>
+        </form>
+    `;
 
-    // Vérifier que tous les champs sont remplis
-    if (nom && prenom && telephone && date_naissance && lieu_naissance && adresse) {
-        const newCitizenRef = firebase.database().ref('citizens').push();
-        newCitizenRef.set({
-            nom: nom,
-            prenom: prenom,
-            telephone: telephone,
-            date_naissance: date_naissance,
-            lieu_naissance: lieu_naissance,
-            adresse: adresse
-        });
+    // Afficher le formulaire dans #citizenList
+    document.getElementById('citizenList').innerHTML = html;
 
-        alert('Citoyen ajouté avec succès!');
-    } else {
-        alert('Veuillez remplir tous les champs.');
-    }
+    // Écouter l'événement de soumission du formulaire
+    document.getElementById('citizenForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêcher la soumission par défaut du formulaire
+
+        // Récupérer les valeurs des champs
+        const nom = document.getElementById('nom').value;
+        const prenom = document.getElementById('prenom').value;
+        const telephone = document.getElementById('telephone').value;
+        const date_naissance = document.getElementById('date_naissance').value;
+        const lieu_naissance = document.getElementById('lieu_naissance').value;
+        const adresse = document.getElementById('adresse').value;
+
+        // Vérifier que tous les champs sont remplis
+        if (nom && prenom && telephone && date_naissance && lieu_naissance && adresse) {
+            const newCitizenRef = firebase.database().ref('citizens').push();
+            newCitizenRef.set({
+                nom: nom,
+                prenom: prenom,
+                telephone: telephone,
+                date_naissance: date_naissance,
+                lieu_naissance: lieu_naissance,
+                adresse: adresse
+            });
+
+            alert('Citoyen ajouté avec succès!');
+
+            // Recharger la liste des citoyens après l'ajout
+            loadCitizens();
+        } else {
+            alert('Veuillez remplir tous les champs.');
+        }
+    });
 }
 
 
