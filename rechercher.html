@@ -2,4 +2,30 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechercher un citoyen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Rechercher un citoyen</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="rechercher.html">Rechercher un citoyen</a></li>
+                <li><a href="ajouter.html">Ajouter un citoyen</a></li>
+                <li><a href="supprimer.html">Supprimer un citoyen</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Rechercher un citoyen</h2>
+        <input type="text" id="searchInput" placeholder="Nom du citoyen">
+        <button onclick="searchCitizen()">Rechercher</button>
+        <div id="searchResult"></div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
