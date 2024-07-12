@@ -1,14 +1,13 @@
 // Assurer que Firebase est initialisé
 if (!firebase.apps.length) {
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "YOUR_DATABASE_URL",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+      const firebaseConfig = {
+        apiKey: "AIzaSyDL1u1v8MaAIsEdi_nJOtGvbAjSfeharbs",
+        authDomain: "arcadia-intranet.firebaseapp.com",
+        projectId: "arcadia-intranet",
+        storageBucket: "arcadia-intranet.appspot.com",
+        messagingSenderId: "1063972220375",
+        appId: "1:1063972220375:web:954926ef011161d655ef92"
+      };
     firebase.initializeApp(firebaseConfig);
 }
 
