@@ -17,10 +17,6 @@ script type="module">
   };
 
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
 // Function to add a citizen
 function addCitizen() {
     const name = document.getElementById('citizenName').value;
