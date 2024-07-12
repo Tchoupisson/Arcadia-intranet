@@ -1,53 +1,20 @@
-// Load all citizens
-function loadCitizens() {
-    const citizenRef = firebase.database().ref('citizens');
-    citizenRef.on('value', (snapshot) => {
-        const citizens = snapshot.val();
-        let html = '<h2>Liste des citoyens</h2>';
-        for (let citizen in citizens) {
-            html += `<div>
-                        <p><strong>Nom:</strong> ${citizens[citizen].nom} ${citizens[citizen].prenom}</p>
-                        <p><strong>Téléphone:</strong> ${citizens[citizen].telephone}</p>
-                        <p><strong>Date de naissance:</strong> ${citizens[citizen].date_naissance}</p>
-                        <p><strong>Lieu de naissance:</strong> ${citizens[citizen].lieu_naissance}</p>
-                        <p><strong>Adresse:</strong> ${citizens[citizen].adresse}</p>
-                        <button onclick="deleteCitizen('${citizen}')">Supprimer</button>
-                        <button onclick="editCitizen('${citizen}')">Modifier</button>
-                    </div>`;
-        }
-        document.getElementById('citizenList').innerHTML = html;
-    });
+// Assurer que Firebase est initialisé
+if (!firebase.apps.length) {
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
 }
 
-// Search citizen by name
-function searchCitizen() {
-    let searchQuery = prompt('Entrez le nom du citoyen à rechercher:');
-    searchQuery = searchQuery.trim().toLowerCase();
-    
-    const citizenRef = firebase.database().ref('citizens');
-    citizenRef.orderByChild('nom').equalTo(searchQuery).on('value', (snapshot) => {
-        const citizen = snapshot.val();
-        if (citizen) {
-            let html = '<h2>Résultat de la recherche</h2>';
-            html += `<div>
-                        <p><strong>Nom:</strong> ${citizen.nom} ${citizen.prenom}</p>
-                        <p><strong>Téléphone:</strong> ${citizen.telephone}</p>
-                        <p><strong>Date de naissance:</strong> ${citizen.date_naissance}</p>
-                        <p><strong>Lieu de naissance:</strong> ${citizen.lieu_naissance}</p>
-                        <p><strong>Adresse:</strong> ${citizen.adresse}</p>
-                        <button onclick="deleteCitizen('${snapshot.key}')">Supprimer</button>
-                        <button onclick="editCitizen('${snapshot.key}')">Modifier</button>
-                    </div>`;
-            document.getElementById('citizenList').innerHTML = html;
-        } else {
-            alert('Aucun citoyen trouvé avec ce nom.');
-        }
-    });
-}
-
-// Ajouter un nouveau citoyen via un formulaire
+// Fonction pour ajouter un nouveau citoyen via un formulaire
 function addCitizen() {
-    // Créer un formulaire HTML
+    // Créer un formulaire HTML pour ajouter un citoyen
     let html = `
         <h2>Ajouter un citoyen</h2>
         <form id="citizenForm">
@@ -65,6 +32,8 @@ function addCitizen() {
             <input type="text" id="adresse" name="adresse" required><br><br>
             <button type="submit">Ajouter</button>
         </form>
+        <br>
+        <div id="message"></div>
     `;
 
     // Afficher le formulaire dans #citizenList
@@ -94,7 +63,11 @@ function addCitizen() {
                 adresse: adresse
             });
 
-            alert('Citoyen ajouté avec succès!');
+            // Afficher un message de succès
+            document.getElementById('message').innerHTML = '<p>Citoyen ajouté avec succès!</p>';
+
+            // Effacer le formulaire après l'ajout
+            document.getElementById('citizenForm').reset();
 
             // Recharger la liste des citoyens après l'ajout
             loadCitizens();
@@ -104,33 +77,59 @@ function addCitizen() {
     });
 }
 
+// Fonction pour charger tous les citoyens depuis Firebase
+function loadCitizens() {
+    const citizenList = document.getElementById('citizenList');
+    citizenList.innerHTML = '<h2>Liste des citoyens</h2>';
 
-// Delete a citizen
-function deleteCitizen(citizenId) {
-    if (confirm('Voulez-vous vraiment supprimer ce citoyen?')) {
-        firebase.database().ref('citizens/' + citizenId).remove();
-        alert('Citoyen supprimé avec succès!');
+    const citizensRef = firebase.database().ref('citizens');
+    citizensRef.on('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            const citizen = childSnapshot.val();
+            const citizenItem = `
+                <p><strong>Nom:</strong> ${citizen.nom} ${citizen.prenom}</p>
+                <p><strong>Téléphone:</strong> ${citizen.telephone}</p>
+                <p><strong>Date de naissance:</strong> ${citizen.date_naissance}</p>
+                <p><strong>Lieu de naissance:</strong> ${citizen.lieu_naissance}</p>
+                <p><strong>Adresse:</strong> ${citizen.adresse}</p>
+                <hr>
+            `;
+            citizenList.innerHTML += citizenItem;
+        });
+    });
+}
+
+// Fonction pour rechercher un citoyen par nom
+function searchCitizen() {
+    const searchName = prompt('Entrez le nom du citoyen à rechercher:');
+    if (searchName) {
+        const citizenList = document.getElementById('citizenList');
+        citizenList.innerHTML = '<h2>Résultats de la recherche</h2>';
+
+        const citizensRef = firebase.database().ref('citizens');
+        citizensRef.orderByChild('nom').equalTo(searchName).on('value', function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach(function(childSnapshot) {
+                    const citizen = childSnapshot.val();
+                    const citizenItem = `
+                        <p><strong>Nom:</strong> ${citizen.nom} ${citizen.prenom}</p>
+                        <p><strong>Téléphone:</strong> ${citizen.telephone}</p>
+                        <p><strong>Date de naissance:</strong> ${citizen.date_naissance}</p>
+                        <p><strong>Lieu de naissance:</strong> ${citizen.lieu_naissance}</p>
+                        <p><strong>Adresse:</strong> ${citizen.adresse}</p>
+                        <hr>
+                    `;
+                    citizenList.innerHTML += citizenItem;
+                });
+            } else {
+                citizenList.innerHTML = '<p>Aucun citoyen trouvé avec ce nom.</p>';
+            }
+        });
     }
 }
 
-// Edit a citizen
-function editCitizen(citizenId) {
-    const citizenRef = firebase.database().ref('citizens/' + citizenId);
-    const updatedNom = prompt('Entrez le nouveau nom du citoyen:');
-    const updatedPrenom = prompt('Entrez le nouveau prénom du citoyen:');
-    const updatedTelephone = prompt('Entrez le nouveau numéro de téléphone:');
-    const updatedDateNaissance = prompt('Entrez la nouvelle date de naissance (format JJ/MM/AAAA):');
-    const updatedLieuNaissance = prompt('Entrez le nouveau lieu de naissance:');
-    const updatedAdresse = prompt('Entrez la nouvelle adresse:');
-
-    citizenRef.update({
-        nom: updatedNom,
-        prenom: updatedPrenom,
-        telephone: updatedTelephone,
-        date_naissance: updatedDateNaissance,
-        lieu_naissance: updatedLieuNaissance,
-        adresse: updatedAdresse
-    });
-
-    alert('Informations du citoyen mises à jour avec succès!');
-}
+// Assurez-vous que le script est chargé après le DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Charger initialement tous les citoyens au chargement de la page
+    loadCitizens();
+});
