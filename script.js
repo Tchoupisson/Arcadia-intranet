@@ -16,6 +16,7 @@ script type="module">
     appId: "1:1063972220375:web:197e83357f23303855ef92"
   };
 
+  const app = initializeApp(firebaseConfig);
 
 // Function to add a citizen
 function addCitizen() {
