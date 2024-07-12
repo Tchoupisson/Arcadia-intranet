@@ -14,14 +14,15 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const citizensRef = db.ref('citizens');
 
-// Fonction pour ajouter un citoyen
-function addCitizen() {
-    const nom = prompt('Entrez le nom du citoyen:');
-    const prenom = prompt('Entrez le prénom du citoyen:');
-    const telephone = prompt('Entrez le numéro de téléphone du citoyen:');
-    const dateNaissance = prompt('Entrez la date de naissance du citoyen (JJ/MM/AAAA):');
-    const lieuNaissance = prompt('Entrez le lieu de naissance du citoyen:');
-    const adresse = prompt('Entrez l\'adresse du citoyen:');
+// Fonction pour ajouter un citoyen depuis le formulaire
+const addCitizenButton = document.getElementById('addCitizenButton');
+addCitizenButton.addEventListener('click', function() {
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const telephone = document.getElementById('telephone').value;
+    const dateNaissance = document.getElementById('dateNaissance').value;
+    const lieuNaissance = document.getElementById('lieuNaissance').value;
+    const adresse = document.getElementById('adresse').value;
 
     if (nom && prenom && telephone && dateNaissance && lieuNaissance && adresse) {
         const newCitizenRef = citizensRef.push();
@@ -34,9 +35,20 @@ function addCitizen() {
             adresse: adresse
         });
         alert('Citoyen ajouté avec succès!');
+        resetForm();
     } else {
         alert('Veuillez remplir tous les champs.');
     }
+});
+
+// Fonction pour réinitialiser le formulaire après ajout
+function resetForm() {
+    document.getElementById('nom').value = '';
+    document.getElementById('prenom').value = '';
+    document.getElementById('telephone').value = '';
+    document.getElementById('dateNaissance').value = '';
+    document.getElementById('lieuNaissance').value = '';
+    document.getElementById('adresse').value = '';
 }
 
 // Fonction pour charger tous les citoyens depuis Firebase
@@ -87,12 +99,6 @@ function searchCitizen() {
         });
     }
 }
-
-// Écouter le clic sur le bouton "Ajouter un citoyen"
-const addCitizenButton = document.getElementById('addCitizenButton');
-addCitizenButton.addEventListener('click', function() {
-    addCitizen();
-});
 
 // Écouter le clic sur le bouton "Rechercher un citoyen"
 const searchCitizenButton = document.getElementById('searchCitizenButton');
