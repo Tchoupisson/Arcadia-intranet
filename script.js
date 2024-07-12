@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function filterCitizens(event) {
-        const searchTerm = event.target.value.toLowerCase();
+    function filterCitizens(searchTerm) {
         const filteredCitizens = citizens.filter(citizen =>
             citizen.name.toLowerCase().includes(searchTerm) ||
             citizen.address.toLowerCase().includes(searchTerm) ||
@@ -38,8 +37,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-        searchInput.addEventListener("input", filterCitizens);
+    const searchButton = document.getElementById("searchButton");
+    if (searchButton) {
+        searchButton.addEventListener("click", function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            filterCitizens(searchTerm);
+        });
         renderCitizens(citizens); // Initial render
     }
 
@@ -72,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 saveCitizens();
                 deleteMessage.textContent = "Citizen deleted successfully";
                 deleteInput.value = "";
+                renderCitizens(citizens); // Update table after deletion
             } else {
                 deleteMessage.textContent = "Citizen not found";
             }
