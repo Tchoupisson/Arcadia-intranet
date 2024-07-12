@@ -1,4 +1,4 @@
-// Assurer que Firebase est initialisé
+// Assurer que Firebase est initialisé avec votre configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDL1u1v8MaAIsEdi_nJOtGvbAjSfeharbs",
   authDomain: "arcadia-intranet.firebaseapp.com",
@@ -6,6 +6,7 @@ const firebaseConfig = {
   storageBucket: "arcadia-intranet.appspot.com",
   messagingSenderId: "1063972220375",
   appId: "1:1063972220375:web:954926ef011161d655ef92"
+
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -14,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const citizensRef = db.ref('citizens');
 
-// Fonction pour ajouter un citoyen depuis le formulaire
+// Ajouter un citoyen
 const addCitizenButton = document.getElementById('addCitizenButton');
 addCitizenButton.addEventListener('click', function() {
     const nom = document.getElementById('nom').value;
@@ -41,7 +42,7 @@ addCitizenButton.addEventListener('click', function() {
     }
 });
 
-// Fonction pour réinitialiser le formulaire après ajout
+// Réinitialiser le formulaire après ajout
 function resetForm() {
     document.getElementById('nom').value = '';
     document.getElementById('prenom').value = '';
@@ -51,33 +52,27 @@ function resetForm() {
     document.getElementById('adresse').value = '';
 }
 
-// Fonction pour charger tous les citoyens depuis Firebase
-function loadCitizens() {
-    citizensRef.on('value', function(snapshot) {
-        const citizenList = document.getElementById('citizenList');
-        citizenList.innerHTML = '<h2>Liste des citoyens</h2>';
+// Charger tous les citoyens depuis Firebase et afficher en temps réel
+const citizenList = document.getElementById('citizenList');
+citizensRef.on('child_added', function(data) {
+    const citizen = data.val();
+    const citizenItem = `
+        <p><strong>Nom:</strong> ${citizen.nom} ${citizen.prenom}</p>
+        <p><strong>Téléphone:</strong> ${citizen.telephone}</p>
+        <p><strong>Date de naissance:</strong> ${citizen.dateNaissance}</p>
+        <p><strong>Lieu de naissance:</strong> ${citizen.lieuNaissance}</p>
+        <p><strong>Adresse:</strong> ${citizen.adresse}</p>
+        <hr>
+    `;
+    citizenList.innerHTML += citizenItem;
+});
 
-        snapshot.forEach(function(childSnapshot) {
-            const citizen = childSnapshot.val();
-            const citizenItem = `
-                <p><strong>Nom:</strong> ${citizen.nom} ${citizen.prenom}</p>
-                <p><strong>Téléphone:</strong> ${citizen.telephone}</p>
-                <p><strong>Date de naissance:</strong> ${citizen.dateNaissance}</p>
-                <p><strong>Lieu de naissance:</strong> ${citizen.lieuNaissance}</p>
-                <p><strong>Adresse:</strong> ${citizen.adresse}</p>
-                <hr>
-            `;
-            citizenList.innerHTML += citizenItem;
-        });
-    });
-}
-
-// Fonction pour rechercher un citoyen par nom
-function searchCitizen() {
+// Rechercher un citoyen par nom
+const searchCitizenButton = document.getElementById('searchCitizenButton');
+searchCitizenButton.addEventListener('click', function() {
     const searchName = prompt('Entrez le nom du citoyen à rechercher:');
     if (searchName) {
-        citizensRef.orderByChild('nom').equalTo(searchName).on('value', function(snapshot) {
-            const citizenList = document.getElementById('citizenList');
+        citizensRef.orderByChild('nom').equalTo(searchName).once('value', function(snapshot) {
             citizenList.innerHTML = '<h2>Résultats de la recherche</h2>';
 
             if (snapshot.exists()) {
@@ -98,15 +93,4 @@ function searchCitizen() {
             }
         });
     }
-}
-
-// Écouter le clic sur le bouton "Rechercher un citoyen"
-const searchCitizenButton = document.getElementById('searchCitizenButton');
-searchCitizenButton.addEventListener('click', function() {
-    searchCitizen();
-});
-
-// Charger initialement tous les citoyens au chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
-    loadCitizens();
 });
