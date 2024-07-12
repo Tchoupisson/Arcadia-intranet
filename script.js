@@ -8,7 +8,7 @@ if (!firebase.apps.length) {
         messagingSenderId: "1063972220375",
         appId: "1:1063972220375:web:954926ef011161d655ef92"
       };
-    firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(firebaseConfig);
 }
 
 // Fonction pour ajouter un nouveau citoyen via un formulaire
