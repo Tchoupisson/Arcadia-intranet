@@ -127,8 +127,38 @@ function searchCitizen() {
     }
 }
 
-// Assurez-vous que le script est chargé après le DOM
 document.addEventListener('DOMContentLoaded', function() {
+    // Vérifier si Firebase est déjà initialisé
+    if (!firebase.apps.length) {
+          const firebaseConfig = {
+              apiKey: "AIzaSyDL1u1v8MaAIsEdi_nJOtGvbAjSfeharbs",
+              authDomain: "arcadia-intranet.firebaseapp.com",
+              projectId: "arcadia-intranet",
+              storageBucket: "arcadia-intranet.appspot.com",
+              messagingSenderId: "1063972220375",
+              appId: "1:1063972220375:web:954926ef011161d655ef92"
+      };
+        firebase.initializeApp(firebaseConfig);
+    }
+
     // Charger initialement tous les citoyens au chargement de la page
     loadCitizens();
+
+    // Écouter le clic sur le bouton "Ajouter un citoyen"
+    const addCitizenButton = document.getElementById('addCitizenButton');
+    if (addCitizenButton) {
+        addCitizenButton.addEventListener('click', function() {
+            addCitizen();
+        });
+    }
+
+    // Écouter le clic sur le bouton "Rechercher un citoyen"
+    const searchCitizenButton = document.getElementById('searchCitizenButton');
+    if (searchCitizenButton) {
+        searchCitizenButton.addEventListener('click', function() {
+            searchCitizen();
+        });
+    });
+});
+
 });
