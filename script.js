@@ -51,4 +51,30 @@ document.addEventListener("DOMContentLoaded", function() {
                 name: event.target.name.value,
                 address: event.target.address.value,
                 infraction: event.target.infraction.value
-           
+            };
+            citizens.push(newCitizen);
+            saveCitizens();
+            alert("Citizen added successfully");
+            event.target.reset();
+        });
+    }
+
+    const deleteInput = document.getElementById("deleteInput");
+    const deleteButton = document.getElementById("deleteButton");
+    const deleteMessage = document.getElementById("deleteMessage");
+
+    if (deleteButton) {
+        deleteButton.addEventListener("click", function() {
+            const nameToDelete = deleteInput.value.trim();
+            const index = citizens.findIndex(citizen => citizen.name.toLowerCase() === nameToDelete.toLowerCase());
+            if (index !== -1) {
+                citizens.splice(index, 1);
+                saveCitizens();
+                deleteMessage.textContent = "Citizen deleted successfully";
+                deleteInput.value = "";
+            } else {
+                deleteMessage.textContent = "Citizen not found";
+            }
+        });
+    }
+});
