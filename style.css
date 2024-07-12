@@ -1,31 +1,38 @@
-form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
+body {
+    font-family: Arial, sans-serif;
 }
 
-form label {
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 1rem;
+}
+
+form input {
     display: block;
-    margin-bottom: 10px;
-}
-
-form input[type="text"] {
-    width: calc(100% - 10px);
-    padding: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
 
 form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-form button:hover {
-    background-color: #45a049;
+    display: block;
+    padding: 0.5rem 1rem;
 }
