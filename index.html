@@ -11,9 +11,27 @@
 <body>
     <div id="app">
         <h1>Arcadia Intranet</h1>
-        <div id="addCitizenForm">
+         <div id="addCitizenForm">
             <h2>Ajouter un citoyen</h2>
-            <!-- Formulaire pour ajouter un citoyen -->
+            <label for="nom">Nom:</label><br>
+            <input type="text" id="nom" name="nom" required><br>
+            
+            <label for="prenom">Prénom:</label><br>
+            <input type="text" id="prenom" name="prenom" required><br>
+            
+            <label for="telephone">Numéro de téléphone:</label><br>
+            <input type="tel" id="telephone" name="telephone" required><br>
+            
+            <label for="dateNaissance">Date de naissance (JJ/MM/AAAA):</label><br>
+            <input type="text" id="dateNaissance" name="dateNaissance" required><br>
+            
+            <label for="lieuNaissance">Lieu de naissance:</label><br>
+            <input type="text" id="lieuNaissance" name="lieuNaissance" required><br>
+            
+            <label for="adresse">Adresse:</label><br>
+            <input type="text" id="adresse" name="adresse" required><br><br>
+            
+            <button id="addCitizenButton">Ajouter un citoyen</button>
         </div>
 
         <button id="searchCitizenButton">Rechercher un citoyen</button>
